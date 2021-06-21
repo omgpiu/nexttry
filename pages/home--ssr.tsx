@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import Layout from '../components/Layout';
-import { InferGetStaticPropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import { getAllPosts } from '../lib/db';
 
-export default function Home(props: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function HomeSSR(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     return (
         <Layout>
             <Head>
@@ -15,14 +15,14 @@ export default function Home(props: InferGetStaticPropsType<typeof getStaticProp
             <h2>Latest POSTS</h2>
             <h3>TIME:{ Date.now() }</h3>
             <ul>{ props.posts.map(e => {
-                return <li key={e.title}>{ e.title }</li>
+                return <li key={ e.title }>{ e.title }</li>
             }) }</ul>
         </Layout>
     )
 }
 
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
     const posts = await getAllPosts()
     return { props: { posts } }
 }
