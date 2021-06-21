@@ -1,6 +1,6 @@
 import Head from 'next/head'
+import Link, { InferGetStaticPropsType } from 'next'
 import Layout from '../components/Layout';
-import { InferGetStaticPropsType } from 'next';
 import { getAllPosts } from '../lib/db';
 
 export default function Home(props: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -14,8 +14,12 @@ export default function Home(props: InferGetStaticPropsType<typeof getStaticProp
             <h1>Welcome to Homepage</h1>
             <h2>Latest POSTS</h2>
             <h3>TIME:{ Date.now() }</h3>
-            <ul>{ props.posts.map(e => {
-                return <li key={e.title}>{ e.title }</li>
+            <ul>{ props.posts.map(post => {
+                return (<li key={ post.id }>
+                    <Link href="/post/[id]" as={ `/post/${ post.id }` }>
+                        <a>{ post.title }</a>
+                    </Link>
+                </li>)
             }) }</ul>
         </Layout>
     )
