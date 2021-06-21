@@ -5,9 +5,14 @@ import { Post } from '../Types/Types';
 
 export default function HomeCSR() {
     const [posts, setPosts] = useState<Post[]>()
-    useEffect(()=>{
-
-    })
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const res = await fetch(`${ process.env.NEXT_PUBLIC_API_URL }/api/posts`)
+            const posts: Post[] = await res.json()
+            setPosts(posts)
+        }
+        fetchPosts();
+    }, [])
     return (
         <Layout>
             <Head>
@@ -18,9 +23,14 @@ export default function HomeCSR() {
             <h1>Welcome to Homepage</h1>
             <h2>Latest POSTS</h2>
             <h3>TIME:{ Date.now() }</h3>
-            {/*<ul>{ props.posts.map(e => {*/}
-            {/*    return <li key={ e.title }>{ e.title }</li>*/}
-            {/*}) }</ul>*/}
+            { !posts
+                ? (<div>Loader</div>
+                ) : (
+                    <ul>{ posts.map(e => {
+                        return <li key={ e.title }>{ e.title }</li>
+                    }) }
+                    </ul>) }
+
         </Layout>
     )
 }
